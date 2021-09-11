@@ -29,6 +29,7 @@ prints "Welcome to the catalog home" on the index route
 def home():
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
         products = Product.query.all()
+        app.logger.info('Home page with total of %d products' % len(products))
         return jsonify({
             'count' : len(products)
         })
@@ -52,7 +53,7 @@ def products(page=1):
  
 @catalog.route('/product/<id>') 
 def product(id): 
-    product = Product.query.get_or_404(id) 
+    product = Product.query.get_or_404(id)
     product_key = 'product-%s' % product.id 
     redis.set(product_key, product.name) 
     redis.expire(product_key, 600) 

@@ -36,6 +36,8 @@ db.create_all()
 if not app.debug:
     import logging
     logging.basicConfig(level=logging.INFO)
-    from logging import FileHandler
+    from logging import FileHandler, Formatter
     file_handler = FileHandler(app.config['LOG_FILE'])
     app.logger.addHandler(file_handler)
+    file_handler.setFormatter(Formatter('%(asctime)s %(levelname)s: %(message)s '
+    '[in %(pathname)s:%(lineno)d]'))
