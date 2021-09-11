@@ -4,8 +4,6 @@ from flask_migrate import Migrate
 from redis import Redis
 from flask_wtf.csrf import CSRFProtect
 import os
-from flask_babel import Babel
-
 
 
 
@@ -22,12 +20,6 @@ csrf = CSRFProtect(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 redis = Redis()
-ALLOWED_LANGUAGES = {
-'en': 'English',
-'fr': 'French',
-}
-babel = Babel(app)
-
 
 #api = Api(app, decorators=[csrf.exempt])
 
@@ -40,3 +32,10 @@ from my_app.catalog.views import catalog
 app.register_blueprint(catalog)
 
 db.create_all()
+
+if not app.debug:
+    import logging
+    logging.basicConfig(level=logging.INFO)
+    from logging import FileHandler
+    file_handler = FileHandler(app.config['LOG_FILE'])
+    app.logger.addHandler(file_handler)

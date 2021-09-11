@@ -7,17 +7,13 @@ from my_app.catalog.models import Product, Category
 from sqlalchemy.orm.util import join
 from my_app.catalog.models import ProductForm, CategoryForm
 import os
-from my_app import babel, ALLOWED_LANGUAGES
+
 
 
 
 #from functools import wraps
 
 catalog = Blueprint('catalog', __name__)
-
-@babel.localeselector
-def get_locale():
-    return request.accept_languages.best_match(ALLOWED_LANGUAGES.keys())
 
 
 def allowed_file(filename):
