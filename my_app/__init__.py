@@ -35,7 +35,7 @@ db.create_all()
 
 if not app.debug:
     import logging
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.WARNING)
     from logging import FileHandler, Formatter
     file_handler = FileHandler(app.config['LOG_FILE'])
     app.logger.addHandler(file_handler)
