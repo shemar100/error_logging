@@ -1,7 +1,7 @@
 from my_app import db
 from flask_wtf import FlaskForm
 from decimal import Decimal
-from wtforms import StringField, DecimalField, SelectField, TextField
+from wtforms import  DecimalField, SelectField, TextField
 from wtforms.validators import InputRequired, NumberRange, ValidationError
 from wtforms.widgets import html_params, Select, HTMLString
 from flask_wtf.file import FileField, FileRequired
@@ -61,7 +61,7 @@ class CategoryField(SelectField):
                 raise ValueError(self.gettext('Not a valid choice'))
 
 class NameForm(FlaskForm):
-    name = StringField('Name', validators=[InputRequired()])
+    name = TextField('Name', validators=[InputRequired()])
  
 class ProductForm(NameForm):
     price = DecimalField('Price', validators=[
