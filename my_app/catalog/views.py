@@ -41,6 +41,8 @@ def home():
 def products(page=1): 
     #products = Product.query.all() expensive to fetch all from we will paginate (depracted for now)
     products = Product.query.paginate(page, 10)
+    #uncomment to debug
+    # import pdb; pdb.set_trace()
     # res = {} 
     # for product in products: 
     #     res[product.id] = { 
@@ -146,6 +148,11 @@ def category(id):
     category = Category.query.get_or_404(id) 
     return render_template('category.html', category=category)
 
+@app.route('/debug-sentry')
+def trigger_error():
+    division_by_zero = 1 / 0
+
 @app.errorhandler(404)
 def page_not_found(e):
+    app.logger.error(e)
     return render_template('404.html'), 404
