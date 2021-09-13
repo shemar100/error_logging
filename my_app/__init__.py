@@ -9,7 +9,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 
 sentry_sdk.init(
-    dsn="https://38b9a60b3fe449c8b78c30ac4dd193cf@o996807.ingest.sentry.io/5955316",
+    dsn="your sentry key",
     integrations=[FlaskIntegration()],
 
     # Set traces_sample_rate to 1.0 to capture 100%
