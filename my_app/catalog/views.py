@@ -70,19 +70,19 @@ def recent_products():
 @catalog.route('/product-create', methods=['POST','GET']) 
 def create_product():
     form = ProductForm()
-
     if form.validate_on_submit():
         name = form.name.data
         price = form.price.data 
         category = Category.query.get_or_404(
             form.category.data
         )
+        image = request.files and request.files['image']
+        filename = ''
         image = form.image.data
         if allowed_file(image.filename):
             filename = secure_filename(image.filename)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         product = Product(name, price, category, filename)
-         
         db.session.add(product) 
         db.session.commit() 
         flash(f'The product {name} has been created', 'success')
