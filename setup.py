@@ -13,8 +13,13 @@ setup(
     packages=['my_app'], 
     platforms='any', 
     install_requires=[ 
-        'flask','Werkzeug==0.16'
-    ], 
+        'flask',
+        'Werkzeug==0.16',
+        'sentry-sdk',
+        'flask-wtf'
+    ],
+    include_package_data=True,
+    zip_safe = False,
     classifiers=[ 
         'Development Status :: 4 - Beta', 
         'Environment :: Web Environment', 

@@ -9,7 +9,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 
 sentry_sdk.init(
-    dsn="add sentry key",
+    dsn="sentry key",
     integrations=[FlaskIntegration()],
 
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -34,7 +34,7 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 redis = Redis()
 
-app.config['LOG_FILE'] = 'application.log'
+app.config['LOG_FILE'] = '/tmp/application.log'
 
 if not app.debug:
     import logging
