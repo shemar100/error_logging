@@ -1,1 +1,1 @@
-gunicorn my_app:app
+gunicorn -w 4 my_app:app
