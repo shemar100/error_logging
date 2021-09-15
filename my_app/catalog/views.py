@@ -6,7 +6,7 @@ from my_app import db, app, redis
 from my_app.catalog.models import Product, Category
 from sqlalchemy.orm.util import join
 from my_app.catalog.models import ProductForm, CategoryForm
-import os
+import os, boto3
 
 
 
@@ -72,16 +72,30 @@ def create_product():
     form = ProductForm()
     if form.validate_on_submit():
         name = form.name.data
-        price = form.price.data 
+        price = form.price.data
         category = Category.query.get_or_404(
             form.category.data
         )
         image = request.files and request.files['image']
         filename = ''
-        image = form.image.data
-        if allowed_file(image.filename):
+        if image and allowed_file(image.filename):
             filename = secure_filename(image.filename)
-            image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            session = boto3.Session(
+                aws_access_key_id=app.config['AWS_ACCESS_KEY'],
+                aws_secret_access_key=app.config['AWS_SECRET_KEY']
+            )
+            s3 = session.resource('s3')
+            bucket = s3.Bucket(app.config['AWS_BUCKET'])
+            if bucket not in list(s3.buckets.all()):
+                bucket = s3.create_bucket(
+                    Bucket=app.config['AWS_BUCKET'],
+                    CreateBucketConfiguration={
+                        'LocationConstraint': 'us-east-1'
+                    },
+                )
+            bucket.upload_fileobj(
+                image, filename,
+                ExtraArgs={'ACL': 'public-read'})
         product = Product(name, price, category, filename)
         db.session.add(product) 
         db.session.commit() 
@@ -128,7 +142,8 @@ def create_category():
 
 @catalog.route('/categories') 
 def categories(): 
-    categories = Category.query.all() 
+    categories = Category.query.all()
+    category_count = len(categories)
     # res = {} 
     # for category in categories: 
     #     res[category.id] = { 
@@ -141,6 +156,8 @@ def categories():
         #         'price': product.price,
         #     }
     # return jsonify(res)
+    if category_count <= 0:
+        flash(f'There are {category_count} categories in database', 'warning')
     return render_template('categories.html',categories=categories) 
 
 @catalog.route('/category/<id>') 

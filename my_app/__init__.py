@@ -9,7 +9,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 
 sentry_sdk.init(
-    dsn="sentry key",
+    dsn="https://38b9a60b3fe449c8b78c30ac4dd193cf@o996807.ingest.sentry.io/5955316",
     integrations=[FlaskIntegration()],
 
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -28,6 +28,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.realpath('.') +'/my_app/static/uploads'
 app.config['WTF_CSRF_SECRET_KEY']  = 'random key for form'
 app.config['LOG_FILE'] = 'application.log'
+app.config['AWS_ACCESS_KEY'] = ''
+app.config['AWS_SECRET_KEY'] = ''
+app.config['AWS_BUCKET'] = ''
 csrf = CSRFProtect(app) 
 
 db = SQLAlchemy(app)
