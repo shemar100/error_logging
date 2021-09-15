@@ -56,16 +56,16 @@ def products(page=1):
 @catalog.route('/product/<id>') 
 def product(id): 
     product = Product.query.get_or_404(id)
-    product_key = 'product-%s' % product.id 
-    redis.set(product_key, product.name) 
-    redis.expire(product_key, 600) 
+    # product_key = 'product-%s' % product.id 
+    # redis.set(product_key, product.name) 
+    # redis.expire(product_key, 600) 
     return render_template('product.html', product=product)  
 
-@catalog.route('/recent-products') 
-def recent_products(): 
-    keys_alive = redis.keys('product-*') 
-    products = [redis.get(k).decode('utf-8') for k in keys_alive] 
-    return jsonify({'visited': products})
+# @catalog.route('/recent-products') 
+# def recent_products(): 
+#     keys_alive = redis.keys('product-*') 
+#     products = [redis.get(k).decode('utf-8') for k in keys_alive] 
+#     return jsonify({'visited': products})
     
 @catalog.route('/product-create', methods=['POST','GET']) 
 def create_product():
