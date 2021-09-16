@@ -16,9 +16,7 @@ setup(
         'flask',
         'Werkzeug==0.16',
         'sentry-sdk',
-        'flask-wtf',
-        'psycopg2-binary',
-        'psycopg2'
+        'flask-wtf'
     ],
     include_package_data=True,
     zip_safe = False,
