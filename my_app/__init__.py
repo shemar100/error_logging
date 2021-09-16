@@ -33,7 +33,6 @@ app.config['AWS_SECRET_KEY'] = ''
 app.config['AWS_BUCKET'] = ''
 csrf = CSRFProtect(app) 
 
-
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 redis = Redis()
