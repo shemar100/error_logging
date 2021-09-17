@@ -23,14 +23,14 @@ ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 RECEPIENTS = ['test@gmail.com']
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = ''
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.realpath('.') +'/my_app/static/uploads'
 app.config['WTF_CSRF_SECRET_KEY']  = 'random key for form'
 app.config['LOG_FILE'] = 'application.log'
-app.config['AWS_ACCESS_KEY'] = 'AKIAQ33NPU6TF2PYLNHZ'
-app.config['AWS_SECRET_KEY'] = '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'
-app.config['AWS_BUCKET'] = 'testbucket-smbj'
+app.config['AWS_ACCESS_KEY'] = ''
+app.config['AWS_SECRET_KEY'] = ''
+app.config['AWS_BUCKET'] = ''
 csrf = CSRFProtect(app) 
 
 db = SQLAlchemy(app)
