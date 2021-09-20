@@ -1,4 +1,4 @@
-from my_app import db
+from my_app import db, es
 from flask_wtf import FlaskForm
 from decimal import Decimal
 from wtforms import  DecimalField, SelectField, StringField
@@ -19,6 +19,13 @@ class Product(db.Model):
         self.price = price
         self.category = category
         self.image_path = image_path
+
+    def add_index_to_es(self):
+        es.index(index='catalog', body={
+            'name': self.name,
+            'category': self.category.name
+        }, id=self.id)
+        es.indices.refresh(index='catalog')
     
     def __repr__(self):
         return 'Product<%d> ' % self.id
@@ -29,6 +36,13 @@ class Category(db.Model):
 
     def __init__(self, name):
         self.name = name
+
+    def add_index_to_es(self):
+        es.index(index='catalog', body={
+            'name': self.name,
+        }, id=self.id)
+        es.indices.refresh(index='catalog')
+
 
     def __repr__(self):
         f'<Category> {self.id}'

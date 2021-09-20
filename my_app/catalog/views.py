@@ -2,7 +2,7 @@ from flask import request, jsonify, Blueprint, render_template, flash, redirect,
 from my_app import ALLOWED_EXTENSIONS
 from flask.helpers import url_for
 from werkzeug.utils import secure_filename
-from my_app import db, app, redis
+from my_app import db, app, es
 from my_app.catalog.models import Product, Category
 from sqlalchemy.orm.util import join
 from my_app.catalog.models import ProductForm, CategoryForm
@@ -99,7 +99,8 @@ def create_product():
                 ExtraArgs={'ACL': 'public-read'})
         product = Product(name, price, category, filename)
         db.session.add(product) 
-        db.session.commit() 
+        db.session.commit()
+        product.add_index_to_es()
         flash(f'The product {name} has been created', 'success')
         return redirect(url_for('catalog.product', id=product.id))
 
@@ -122,7 +123,20 @@ def product_search(page=1):
     if category:
         products = products.select_from(join(Product, Category)).filter(Category.name.like('%' + category + '%'))
     return render_template('products.html', products=products.paginate(page,10))
-    
+
+@catalog.route('/product-search-es')
+@catalog.route('/product-search-es/<int:page>')
+def product_search_es(page=1):
+    q = request.args.get('q')
+    products = es.search(index="catalog", body={
+        "query": {
+            "query_string": {
+            "query" : q
+            }
+        }
+    })
+    return products
+
 
 
 @catalog.route('/category-create', methods=['POST','GET']) 

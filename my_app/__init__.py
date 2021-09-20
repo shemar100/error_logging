@@ -13,10 +13,9 @@ from elasticsearch import Elasticsearch
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 RECEPIENTS = ['test@gmail.com']
 
-es = Elasticsearch('http://localhost:9200/')
-es = es.indices.create('catalog', ignore=400)
 
 app = Flask(__name__)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.realpath('.') +'/my_app/static/uploads'
 app.config['WTF_CSRF_SECRET_KEY']  = 'random key for form'
@@ -53,6 +52,9 @@ if not app.debug:
 
 
 app.secret_key = 'some_random_key'
+es = Elasticsearch('http://localhost:9200/')
+es.indices.create('catalog', ignore=400)
+
 
 from my_app.catalog.views import catalog
 
