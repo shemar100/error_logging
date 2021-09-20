@@ -15,11 +15,14 @@ RECEPIENTS = ['test@gmail.com']
 
 
 app = Flask(__name__)
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://doadmin:4q3Gvl_DU-UGIH5v@db-postgresql-nyc3-08885-do-user-9807415-0.b.db.ondigitalocean.com:25060/defaultdb?sslmode=require'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.realpath('.') +'/my_app/static/uploads'
 app.config['WTF_CSRF_SECRET_KEY']  = 'random key for form'
 app.config['LOG_FILE'] = 'application.log'
+app.config['AWS_ACCESS_KEY'] = 'AKIAQ33NPU6TC2AHSMK2'
+app.config['AWS_SECRET_KEY'] = '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'
+app.config['AWS_BUCKET'] = 'testbucket-smbj'
 app.config['WHOOSH_BASE'] = '/tmp/whoosh'
 csrf = CSRFProtect(app) 
 
