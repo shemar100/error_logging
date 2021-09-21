@@ -6,7 +6,6 @@ from flask_wtf.csrf import CSRFProtect
 import os
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
-from elasticsearch import Elasticsearch
 
 
 
@@ -55,9 +54,6 @@ if not app.debug:
 
 
 app.secret_key = 'some_random_key'
-es = Elasticsearch('http://localhost:9200/')
-es.indices.create('catalog', ignore=400)
-
 
 from my_app.catalog.views import catalog
 
@@ -65,8 +61,5 @@ from my_app.catalog.views import catalog
 app.register_blueprint(catalog)
 
 db.create_all()
-
-def get():
-    return
 
 
