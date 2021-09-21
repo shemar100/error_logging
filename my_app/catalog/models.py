@@ -1,10 +1,16 @@
-from my_app import db
+from my_app import db, es, app
 from flask_wtf import FlaskForm
 from decimal import Decimal
 from wtforms import  DecimalField, SelectField, StringField
 from wtforms.validators import InputRequired, NumberRange, ValidationError
 from wtforms.widgets import html_params, Select, HTMLString
 from flask_wtf.file import FileField, FileRequired
+from blinker import Namespace
+
+#signal declarations have a global scope and can be implemented in any file
+catalog_signals = Namespace()
+product_created = catalog_signals.signal('product-created')
+category_created = catalog_signals.signal('category-created')
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +25,16 @@ class Product(db.Model):
         self.price = price
         self.category = category
         self.image_path = image_path
-        
+
+    def add_product_index_to_es(sender, product):
+        es.index(index='catalog', body={
+            'name': product.name,
+            'category': product.category.name
+        }, id=product.id)
+        es.indices.refresh(index='catalog')
+    
+    product_created.connect(add_product_index_to_es, app)
+    
     def __repr__(self):
         return 'Product<%d> ' % self.id
 
@@ -29,6 +44,13 @@ class Category(db.Model):
 
     def __init__(self, name):
         self.name = name
+
+    def add_category_index_to_es(sender, category):
+        es.index(index='catalog', body={
+            'name': category.name,
+        }, id=category.id)
+        es.indices.refresh(index='catalog')
+    category_created.connect(add_category_index_to_es, app)
 
     def __repr__(self):
         f'<Category> {self.id}'

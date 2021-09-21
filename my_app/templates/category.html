@@ -3,7 +3,7 @@
 {% block container %}
   <div class="top-pad">
     <h2>{{ category.name }}</h2>
-    <div class="well">
+    <div>
       {% for product in category.products %}
         <h3>
           <a href="{{ url_for('catalog.product', id=product.id) }}">{{ product.name }}</a>
