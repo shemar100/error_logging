@@ -7,6 +7,7 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from elasticsearch import Elasticsearch
+from flask_caching import Cache
 
 
 
@@ -28,6 +29,7 @@ migrate = Migrate(app, db)
 redis = Redis()
 
 app.config['LOG_FILE'] = '/tmp/application.log'
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 if not app.debug:
     import logging

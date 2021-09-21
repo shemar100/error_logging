@@ -2,11 +2,12 @@ from flask import request, jsonify, Blueprint, render_template, flash, redirect,
 from my_app import ALLOWED_EXTENSIONS
 from flask.helpers import url_for
 from werkzeug.utils import secure_filename
-from my_app import db, app, es
+from my_app import db, app, es, cache
 from my_app.catalog.models import Product, Category
 from sqlalchemy.orm.util import join
 from my_app.catalog.models import ProductForm, CategoryForm, product_created, category_created
 import os, boto3
+
 
 
 
@@ -140,7 +141,7 @@ def product_search_es(page=1):
 
 
 
-@catalog.route('/category-create', methods=['POST','GET']) 
+@catalog.route('/category-create', methods=['POST','GET'])
 def create_category(): 
     form = CategoryForm()
     if form.validate_on_submit():
@@ -157,7 +158,8 @@ def create_category():
     
     return render_template('category-create.html', form=form)  
 
-@catalog.route('/categories') 
+@catalog.route('/categories')
+@cache.cached(timeout=120)
 def categories(): 
     categories = Category.query.all()
     category_count = len(categories)
