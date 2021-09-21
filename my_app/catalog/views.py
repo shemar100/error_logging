@@ -39,6 +39,7 @@ def home():
 
  
 @catalog.route('/products')
+@cache.cached(timeout=120)
 @catalog.route('/products/<int:page>')
 def products(page=1): 
     #products = Product.query.all() expensive to fetch all from we will paginate (depracted for now)
