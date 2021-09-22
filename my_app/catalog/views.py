@@ -37,9 +37,8 @@ def home():
         })
     return render_template('home.html')
 
- 
-@catalog.route('/products')
 @cache.cached(timeout=120)
+@catalog.route('/products')
 @catalog.route('/products/<int:page>')
 def products(page=1): 
     #products = Product.query.all() expensive to fetch all from we will paginate (depracted for now)
@@ -55,7 +54,8 @@ def products(page=1):
     #     } 
     # return jsonify(res) 
     return render_template('products.html', products=products)
- 
+
+@cache.memoize(120)
 @catalog.route('/product/<id>') 
 def product(id): 
     product = Product.query.get_or_404(id)
@@ -180,6 +180,7 @@ def categories():
         flash(f'There are {category_count} categories in database', 'warning')
     return render_template('categories.html',categories=categories) 
 
+@cache.memoize(120)
 @catalog.route('/category/<id>') 
 def category(id): 
     category = Category.query.get_or_404(id) 

@@ -20,7 +20,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.realpath('.') +'/my_app/static/uploads'
 app.config['WTF_CSRF_SECRET_KEY']  = 'random key for form'
 app.config['LOG_FILE'] = 'application.log'
-
 app.config['WHOOSH_BASE'] = '/tmp/whoosh'
 csrf = CSRFProtect(app) 
 
