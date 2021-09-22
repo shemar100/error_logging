@@ -7,7 +7,8 @@ from my_app.catalog.models import Product, Category
 from sqlalchemy.orm.util import join
 from my_app.catalog.models import ProductForm, CategoryForm, product_created, category_created
 import os, boto3
-
+from my_app import mail
+from flask_mail import Message
 
 
 
@@ -150,6 +151,12 @@ def create_category():
         category = Category(name) 
         db.session.add(category) 
         db.session.commit()
+        message = Message(
+            "New category added",
+            recipients=['anderson.shemar17@gmail.com']
+            )
+        message.body = 'New category "%s" has been created' % category.name
+        mail.send(message)
         category_created.send(app, category=category)
         flash(f'Category {name} created successfully', 'success')
         return redirect(url_for('catalog.category', id=category.id))
