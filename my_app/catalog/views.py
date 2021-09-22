@@ -155,7 +155,11 @@ def create_category():
             "New category added",
             recipients=['anderson.shemar17@gmail.com']
             )
-        message.body = 'New category "%s" has been created' % category.name
+        message.body = render_template(
+            "category-create-email-text.html",
+            category=category
+            )
+
         mail.send(message)
         category_created.send(app, category=category)
         flash(f'Category {name} created successfully', 'success')
