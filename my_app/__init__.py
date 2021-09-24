@@ -17,21 +17,21 @@ RECEPIENTS = ['test@gmail.com']
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'database string'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'your db address'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = os.path.realpath('.') +'/my_app/static/uploads'
 app.config['WTF_CSRF_SECRET_KEY']  = 'random key for form'
 app.config['LOG_FILE'] = 'application.log'
-app.config['AWS_ACCESS_KEY'] = 'aws key'
-app.config['AWS_SECRET_KEY'] = 'aws secret'
-app.config['AWS_BUCKET'] = 'aws bucket'
+app.config['AWS_ACCESS_KEY'] = 'your aws access key'
+app.config['AWS_SECRET_KEY'] = 'your aws secret_key'
+app.config['AWS_BUCKET'] = 'your bucket'
 app.config['WHOOSH_BASE'] = '/tmp/whoosh'
-app.config['MAIL_SERVER'] = 'mail server'
+app.config['MAIL_SERVER'] = 'your mail server'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'username'
 app.config['MAIL_PASSWORD'] = 'password'
-app.config['MAIL_DEFAULT_SENDER'] = ('name', 'sender')
+app.config['MAIL_DEFAULT_SENDER'] = ('admin', 'sneder email')
 mail = Mail(app)
 
 csrf = CSRFProtect(app) 

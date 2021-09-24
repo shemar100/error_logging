@@ -9,6 +9,7 @@ from my_app.catalog.models import ProductForm, CategoryForm, product_created, ca
 import os, boto3
 from my_app import mail
 from flask_mail import Message
+from threading import Thread
 
 
 
@@ -17,6 +18,11 @@ from flask_mail import Message
 #from functools import wraps
 
 catalog = Blueprint('catalog', __name__)
+
+
+def send_mail(message):
+    with app.app_context():
+        mail.send(message)
 
 
 def allowed_file(filename):
@@ -160,7 +166,10 @@ def create_category():
             category=category
             )
 
-        mail.send(message)
+        #mail.send(message)
+        #sending mail on thread
+        t = Thread(target=send_mail, args=(message))
+        t.start()
         category_created.send(app, category=category)
         flash(f'Category {name} created successfully', 'success')
         return redirect(url_for('catalog.category', id=category.id))
